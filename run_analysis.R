@@ -37,7 +37,8 @@ data$Activity<- activity
 
 library(plyr) 
 tidy_avg<- ddply(data, .(Activity, Subject), numcolwise(mean))            # Step 5
-tidy_avg<- gather(tidy_avg, type, value, tBodyAcc.mean.X:fBodyGyroJerkMag.std)
+tidy_avg<- gather(tidy_avg, type, Value, tBodyAcc.mean.X:fBodyGyroJerkMag.std)
 tidy_avg<- separate(tidy_avg, type, into=c("Type", "Estimator", "Coordinate"), sep="[.]",
                      extra="merge")
-write.table(tidy_avg, file="tidy.txt", row.names=F)
+tidy_avg<- spread(tidy_avg, Estimator, Value)
+write.table(tidy_avg, file="final.txt", row.names=F)
