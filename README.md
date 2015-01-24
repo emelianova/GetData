@@ -1,0 +1,2 @@
+This script prepares a tidy data set from **Human Activity Recognition Using Smartphones Data Set** (details are [here](http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones)). 
+It is supposed to be put into the working directory. Then type `source("run_analysis.R")` on the console, and script will download and unzip data if there isn't "UCI HAR Dataset" folder in the working directory, and do some preprocessing.
