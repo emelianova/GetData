@@ -21,7 +21,7 @@ Average by groups is taken with `ddply` function, result is stored in a new obje
 Mean and standard deviation are spreaded back - I suppose these could be the actual column names.
 ##### Variables
 `Activity`: activity performed while taking measurements (WALKING, WALKING_UPSTAIRS, WALKING_DOWNSTAIRS, SITTING, STAYING, LAYING).  
-`Subject`: subject ¹.  
+`Subject`: subject number.  
 `Type` is not really a variable, it is composed of five variables: domain (t - time, f - frequency), source (Body - human body, Gravity - gravity), signal (Acc - from the accelerometer, Gyro - from the gyroscope), jerk (Jerk - yes, NA - no), and magnitude (Mag - yes, NA - no).  Why haven't I split them? Too sleepy to think about regular expressions. This variable makes the dataset a bit messy.   
 `Coordinate` - coordinate in 3D space - X, Y, Z or NA (where it's not applicable).  
 `mean` - mean.  
