@@ -18,6 +18,7 @@ Script spreads 6 activity indicators into 6 columns, assigns corresponding activ
 Parentheses, dashes and mistakes like "BodyBody" are removed. `subject` and `activity` variables are attached to the bulk of data.   
 ##### Step 5 - Second data set
 Average by groups is taken with `ddply` function, result is stored in a new object. As far as I understand, column names here are actually variables, so it makes sense to gather them into one column and separate.   
+(Well, for the second thought, would it really be easier to deal with such a dataset? Don't know, but let variables be variables.)   
 I know my separation process is not optimized at all, but I'm new to R. Firstly I use dots to separate coordinates and estimators (`.mean` and `.std`). Secondly I insert commas before capital letters (except for JerkMag combination) with regexpr `([^k])([A-Z])` and translate it all to lower case. Then separate again.  
 Mean and standard deviation are spreaded back - I suppose these could be the actual column names.  
 Final data set has 1155 obs. of 9 variables.
