@@ -6,7 +6,7 @@ if (!file.exists("UCI HAR Dataset")) {
 
 data<- read.table("UCI HAR Dataset/train/X_train.txt")           # Step 1
 data_test<- read.table("UCI HAR Dataset/test/X_test.txt")
-data<- rbind(data, data_test)
+data<- rbind(data1, data_test)
 
 subject<- read.table("UCI HAR Dataset/train/subject_train.txt")
 sub_test<- read.table("UCI HAR Dataset/test/subject_test.txt")
@@ -17,28 +17,31 @@ act_test<- read.table("UCI HAR Dataset/test/y_test.txt")
 activity<- rbind(activity, act_test)                       
 
 varnames<- unlist(read.table("UCI HAR Dataset/features.txt",     # Step 2  
-                             colClasses="character")[,2])     
+                             colClasses="character")[,2])    
 colnums<- grep("-(mean|std)[(]", varnames)                     
 varnames<- varnames[colnums]
 data<- data[, colnums]                                       
 
 library(tidyr)                                                   # Step 3
 activity<- spread(activity, V1, V1)
-colnames(activity)<- c("WALKING", "WALKING_UPSTAIRS", "WALKING_DOWNSTAIRS",
-"SITTING", "STAYING", "LAYING")
+colnames(activity)<- c("walking", "walkingup", "walkingdown","sitting", "staying", "laying")
 activity<- gather(activity, activity, value, na.rm=TRUE)[,1]   
 
 varnames<- gsub("[()]", "", varnames)                            # Step 4
 varnames<- gsub("BodyBody", "Body", varnames) 
-varnames<- gsub("[-]", ".", varnames) 
+varnames<- gsub("[-]", ".", varnames)
 colnames(data)<- varnames
-data$Subject<- subject
-data$Activity<- activity
+data$subject<- subject
+data$activity<- activity
 
 library(plyr) 
-tidy_avg<- ddply(data, .(Activity, Subject), numcolwise(mean))            # Step 5
-tidy_avg<- gather(tidy_avg, type, Value, tBodyAcc.mean.X:fBodyGyroJerkMag.std)
-tidy_avg<- separate(tidy_avg, type, into=c("Type", "Estimator", "Coordinate"), sep="[.]",
+tidy_avg<- ddply(data, .(activity, subject), numcolwise(mean))            # Step 5
+tidy_avg<- gather(tidy_avg, type, value, tBodyAcc.mean.X:fBodyGyroJerkMag.std)
+tidy_avg<- separate(tidy_avg, type, into=c("type", "estimator", "coordinate"), sep="[.]",
                      extra="merge")
-tidy_avg<- spread(tidy_avg, Estimator, Value)
+tidy_avg$type<- tolower(gsub("([^k])([A-Z])", "\\1,\\2", tidy_avg$type))
+tidy_avg<- separate(tidy_avg, type, into=c("domain", "source", "signal", "jerkmag"), 
+                    sep=",", extra="merge")
+tidy_avg<- spread(tidy_avg, estimator, value)
+
 write.table(tidy_avg, file="final.txt", row.names=F)
