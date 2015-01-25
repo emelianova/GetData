@@ -1,4 +1,4 @@
-Project goal was to create a script that does the following: (taken from [here](https://class.coursera.org/getdata-010/human_grading/view/courses/973497/assessments/3/submissions))  
+Project goal was to create a script that does the following (from [here](https://class.coursera.org/getdata-010/human_grading/view/courses/973497/assessments/3/submissions)):  
 1. Merges the training and the test sets to create one data set.  
 2. Extracts only the measurements on the mean and standard deviation for each measurement.  
 3. Uses descriptive activity names to name the activities in the data set.  
@@ -15,10 +15,10 @@ In order to get variable names script reads `features.txt`. The regular expressi
 ##### Step 3 - Activity names  
 Script spreads 6 activity indicators into 6 columns, assigns corresponding activity names to these columns and gathers them back. We need only the first column of the resulting data frame.  
 ##### Step 4 - Variable names
-Parentheses, dashes and mistakes like "BodyBody" are removed. `Subject` and `Activity` variables are attached to the bulk of data.   
+Parentheses, dashes and mistakes like "BodyBody" are removed. `subject` and `activity` variables are attached to the bulk of data.   
 ##### Step 5 - Second data set
 Average by groups is taken with `ddply` function, result is stored in a new object. As far as I understand, column names here are actually variables, so it makes sense to gather them into one column and separate.   
-I know my separation process is not optimized at all, but I'm new to R. Firstly I use dots to separate coordinates and estimators (`.mean` and `.std`). Secondly I insert commas before capital letters (except for JerkMag combination) with regexpr `([^k])([A-Z])", "\\1,\\2` and translate it all to lower case. Then separate again.  
+I know my separation process is not optimized at all, but I'm new to R. Firstly I use dots to separate coordinates and estimators (`.mean` and `.std`). Secondly I insert commas before capital letters (except for JerkMag combination) with regexpr `([^k])([A-Z])` and translate it all to lower case. Then separate again.  
 Mean and standard deviation are spreaded back - I suppose these could be the actual column names.  
 Final data set has 1155 obs. of 9 variables.
 ##### Variables
