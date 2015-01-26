@@ -5,16 +5,13 @@ if (!file.exists("UCI HAR Dataset")) {
 }
 
 data<- read.table("UCI HAR Dataset/train/X_train.txt")           # Step 1
-data_test<- read.table("UCI HAR Dataset/test/X_test.txt")
-data<- rbind(data1, data_test)
+data<- rbind(data, read.table("UCI HAR Dataset/test/X_test.txt"))
 
 subject<- read.table("UCI HAR Dataset/train/subject_train.txt")
-sub_test<- read.table("UCI HAR Dataset/test/subject_test.txt")
-subject<- unlist(rbind(subject, sub_test))
+subject<- unlist(rbind(subject, read.table("UCI HAR Dataset/test/subject_test.txt")))
 
 activity<- read.table("UCI HAR Dataset/train/y_train.txt")
-act_test<- read.table("UCI HAR Dataset/test/y_test.txt")
-activity<- rbind(activity, act_test)                       
+activity<- rbind(activity, read.table("UCI HAR Dataset/test/y_test.txt"))                       
 
 varnames<- unlist(read.table("UCI HAR Dataset/features.txt",     # Step 2  
                              colClasses="character")[,2])    
@@ -35,13 +32,13 @@ data$subject<- subject
 data$activity<- activity
 
 library(plyr) 
-tidy_avg<- ddply(data, .(activity, subject), numcolwise(mean))            # Step 5
-tidy_avg<- gather(tidy_avg, type, value, tBodyAcc.mean.X:fBodyGyroJerkMag.std)
-tidy_avg<- separate(tidy_avg, type, into=c("type", "estimator", "coordinate"), sep="[.]",
+tidy<- ddply(data, .(activity, subject), numcolwise(mean))            # Step 5
+tidy<- gather(tidy, type, value, tBodyAcc.mean.X:fBodyGyroJerkMag.std)
+tidy<- separate(tidy, type, into=c("type", "estimator", "coordinate"), sep="[.]",
                      extra="merge")
-tidy_avg$type<- tolower(gsub("([^k])([A-Z])", "\\1,\\2", tidy_avg$type))
-tidy_avg<- separate(tidy_avg, type, into=c("domain", "source", "signal", "jerkmag"), 
+tidy$type<- tolower(gsub("([^k])([A-Z])", "\\1,\\2", tidy$type))
+tidy<- separate(tidy, type, into=c("domain", "source", "signal", "jerkmag"), 
                     sep=",", extra="merge")
-tidy_avg<- spread(tidy_avg, estimator, value)
+tidy<- spread(tidy, estimator, value)
 
-write.table(tidy_avg, file="final.txt", row.names=F)
+write.table(tidy, file="final.txt", row.names=F)
