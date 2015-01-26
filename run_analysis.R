@@ -1,4 +1,5 @@
-if (!file.exists("UCI HAR Dataset")) {
+run_analysis<- function () {
+        if (!file.exists("UCI HAR Dataset")) {
         URL <- "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
         download.file(URL, destfile="smart.zip")
         unzip("smart.zip")
@@ -40,3 +41,4 @@ tidy<- separate(tidy, type, into=c("domain", "source", "signal", "jerkmag"),
 tidy<- spread(tidy, estimator, value)
 
 write.table(tidy, file="final.txt", row.names=F)
+}
